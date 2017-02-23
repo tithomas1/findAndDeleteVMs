@@ -99,7 +99,8 @@ def powerDownAndDelete(serviceInstance, folder, vmList, verbose):
                 print("Powering off {}{}".format(folderName, virtualMachine.name))
             powerTaskList.append(virtualMachine.PowerOffVM_Task())
 
-    waitForTasks(serviceInstance, powerTaskList)
+    if powerTaskList:
+        waitForTasks(serviceInstance, powerTaskList)
 
     # Circle back around and delete the VM instances
 
@@ -109,7 +110,8 @@ def powerDownAndDelete(serviceInstance, folder, vmList, verbose):
             print("Destroying {}{}".format(folderName, virtualMachine.name))
         deleteTaskList.append(virtualMachine.Destroy_Task())
 
-    waitForTasks(serviceInstance, deleteTaskList)
+    if deleteTaskList:
+        waitForTasks(serviceInstance, deleteTaskList)
 
 
 def findTargetVMs():
@@ -179,7 +181,7 @@ def findTargetVMs():
         targetView.Destroy()
 
     except vmodl.MethodFault as error:
-        print("Caught vmodl fault : " + error.msg)
+        print("Caught vmodl fault: " + error.msg)
         return -1
 
     return 0
